@@ -17,6 +17,9 @@ class CameraViewModel: NSObject {
     
     let predictor = Predictor()
     
+    var label = "Label"
+    var confidence: Double = 0.0
+    
     override init() {
         super.init()
         guard let captureDevice = AVCaptureDevice.default(for: .video),
@@ -46,6 +49,7 @@ class CameraViewModel: NSObject {
 extension CameraViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        print("FRAME RECEIVED")
         predictor.estimation(sampleBuffer: sampleBuffer)
     }
 }

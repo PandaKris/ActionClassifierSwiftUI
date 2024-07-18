@@ -64,6 +64,11 @@ extension CameraViewController: PredictorDelegate {
             self.pointsLayer.didChangeValue(for: \.path)
         }
     }
+    
+    func predictor(_ predictor: Predictor, didLabelAction action: String, with confidence: Double) {
+        videoViewModel.label = action
+        videoViewModel.confidence = confidence
+    }
 }
 
 struct CameraPreview: UIViewControllerRepresentable {

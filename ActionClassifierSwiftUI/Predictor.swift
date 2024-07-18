@@ -10,11 +10,20 @@ import Vision
 
 protocol PredictorDelegate: AnyObject {
     func predictor(_ predictor: Predictor, didFindNewRecognizedPoints points: [CGPoint])
+    func predictor(_ predictor: Predictor, didLabelAction action: String, with confidence: Double)
 }
 
 class Predictor {
     
     weak var delegate: PredictorDelegate?
+    
+    // set prediction window size (30 for 1 second (30fps)) and array for predicting
+    let predictionWindowSize = 60
+    var posesWindow: [VNHumanBodyPoseObservation] = []
+    
+    init() {
+        posesWindow.reserveCapacity(predictionWindowSize)
+    }
     
     func estimation(sampleBuffer: CMSampleBuffer) {
         let requestHandler = VNImageRequestHandler(cmSampleBuffer: sampleBuffer, orientation: .up)
@@ -34,6 +43,13 @@ class Predictor {
         observations.forEach { observation in
             processObservation(observation)
         }
+        
+        // get the first accurate observation to be processed with ML detection
+        if let result = observations.first {
+            storeObservation(result)
+            
+            labelActionType()
+        }
     }
     
     func processObservation(_ observation: VNHumanBodyPoseObservation) {
@@ -49,6 +65,70 @@ class Predictor {
         } catch {
             print("Error finding recognized points: \(error)")
         }
+    }
+    
+    func storeObservation(_ observation: VNHumanBodyPoseObservation) {
+        // make sure if poses window is already full, we remove old one and make room for new one
+        if posesWindow.count >= predictionWindowSize {
+            posesWindow.removeFirst()
+        }
+        
+        posesWindow.append(observation)
+    }
+    
+    func labelActionType() {
+        guard let yogaClassifier = try? YogaPoseClassifier(configuration: MLModelConfiguration()) else { return }
+        
+        // prepare the multi array for prediction
+        guard let poseMultiArray = prepareInputWithObservations() else { return }
+        
+        // predict the window
+        guard let predictions = try? yogaClassifier.prediction(poses: poseMultiArray) else { return }
+        
+        let label = predictions.label
+        let confidence = predictions.labelProbabilities[label] ?? 0
+        
+        print(label, confidence)
+        
+        delegate?.predictor(self, didLabelAction: label, with: confidence)
+    }
+    
+    func prepareInputWithObservations() -> MLMultiArray? {
+        let numAvailableFrames = posesWindow.count
+        let observationsNeeded = 60
+        var multiArrayBuffer = [MLMultiArray]()
+        
+        // translate our poses into multi array
+        for frameIndex in 0 ..< min(numAvailableFrames, observationsNeeded) {
+            let pose = posesWindow[frameIndex]
+            do {
+                let oneFrameMultiArray = try pose.keypointsMultiArray()
+                multiArrayBuffer.append(oneFrameMultiArray)
+            } catch {
+                continue
+            }
+        }
+        
+        if numAvailableFrames < observationsNeeded {
+            for _ in 0 ..< (observationsNeeded - numAvailableFrames) {
+                do {
+                    let oneFrameMultiArray = try MLMultiArray(shape: [1, 3, 18], dataType: .double)
+                    try resetMultiArray(oneFrameMultiArray)
+                    multiArrayBuffer.append(oneFrameMultiArray)
+                } catch {
+                    continue
+                }
+            }
+        }
+        
+        return MLMultiArray(concatenating: [MLMultiArray](multiArrayBuffer), axis: 0, dataType: .float)
+    }
+    
+    // function to rewrite to 0 when necessary
+    func resetMultiArray(_ predictionWindow: MLMultiArray, with value: Double = 0.0) throws {
+        let pointer = try UnsafeMutableBufferPointer<Double>(predictionWindow)
+        pointer.initialize(repeating: value)
+        
     }
 }
 

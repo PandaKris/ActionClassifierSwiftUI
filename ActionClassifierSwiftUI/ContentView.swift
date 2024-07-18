@@ -12,8 +12,17 @@ struct ContentView: View {
     @State var cameraViewModel = CameraViewModel()
     
     var body: some View {
-        VStack {
+        ZStack {
             CameraPreview(viewModel: cameraViewModel)
+            
+            VStack {
+                Spacer()
+                VStack {
+                    Text(cameraViewModel.label)
+                    Text("\(cameraViewModel.confidence)")
+                }.padding()
+                    .background(.yellow)
+            }
         }
         .background(.purple)
         .ignoresSafeArea()
