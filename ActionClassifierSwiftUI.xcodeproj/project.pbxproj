@@ -11,6 +11,8 @@
 		6720E8302C48A4AF004ACFE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6720E82F2C48A4AF004ACFE0 /* ContentView.swift */; };
 		6720E8322C48A4B0004ACFE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6720E8312C48A4B0004ACFE0 /* Assets.xcassets */; };
 		6720E8352C48A4B0004ACFE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6720E8342C48A4B0004ACFE0 /* Preview Assets.xcassets */; };
+		6720E83C2C48A4E9004ACFE0 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6720E83B2C48A4E9004ACFE0 /* CameraViewModel.swift */; };
+		6720E83E2C48A4F7004ACFE0 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6720E83D2C48A4F7004ACFE0 /* CameraViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		6720E82F2C48A4AF004ACFE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		6720E8312C48A4B0004ACFE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6720E8342C48A4B0004ACFE0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6720E83B2C48A4E9004ACFE0 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		6720E83D2C48A4F7004ACFE0 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +56,8 @@
 			isa = PBXGroup;
 			children = (
 				6720E82D2C48A4AF004ACFE0 /* ActionClassifierSwiftUIApp.swift */,
+				6720E83B2C48A4E9004ACFE0 /* CameraViewModel.swift */,
+				6720E83D2C48A4F7004ACFE0 /* CameraViewController.swift */,
 				6720E82F2C48A4AF004ACFE0 /* ContentView.swift */,
 				6720E8312C48A4B0004ACFE0 /* Assets.xcassets */,
 				6720E8332C48A4B0004ACFE0 /* Preview Content */,
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6720E8302C48A4AF004ACFE0 /* ContentView.swift in Sources */,
+				6720E83E2C48A4F7004ACFE0 /* CameraViewController.swift in Sources */,
 				6720E82E2C48A4AF004ACFE0 /* ActionClassifierSwiftUIApp.swift in Sources */,
+				6720E83C2C48A4E9004ACFE0 /* CameraViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +283,7 @@
 				DEVELOPMENT_TEAM = YA2L55RA8L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Detect body pose";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +313,7 @@
 				DEVELOPMENT_TEAM = YA2L55RA8L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Detect body pose";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
